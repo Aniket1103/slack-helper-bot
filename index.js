@@ -1,29 +1,9 @@
 require('dotenv').config();
 
-const axios = require('axios');
 const { App } = require('@slack/bolt');
+const { COMMANDS, ACTIONS } = require('./utils/actions');
 const signingSecret = process.env['SLACK_SIGNING_SECRET']
 const botToken = process.env['SLACK_BOT_TOKEN']
-
-const ACTIONS = {
-  "hello" : async (message, say) => {
-    await say(`Hello there! <@${message.user}>.`);
-  },
-  "help" : async (message, say) => {
-    await say('Available commands:\n- /hello\n- /help\n- /time\n- /quote');
-  },
-  "time" : async (message, say) => {
-    const now = new Date();
-    await say(`Current date and time: ${now.toISOString()}`);
-  },
-  "quote" : async (message, say) => {
-    let resp = await axios.get(`https://api.quotable.io/random`);
-    const quote = resp.data.content;
-    await say(`Here goes your quote <@${message.user}>,\n${quote}`);
-  },
-}
-
-const COMMANDS = Object.keys(ACTIONS);
 
 const app = new App({
   signingSecret: signingSecret,
@@ -31,6 +11,11 @@ const app = new App({
 });
 
 
+
+app.action('button_click', async ({ body, ack, say }) => {
+  await ack();
+  await say(`<@${body.user.id}> clicked the button`);
+});
 
 app.error(console.error);
 
