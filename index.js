@@ -2,20 +2,40 @@ require('dotenv').config();
 
 const { App } = require('@slack/bolt');
 const { COMMANDS, ACTIONS } = require('./utils/actions');
-const signingSecret = process.env['SLACK_SIGNING_SECRET']
-const botToken = process.env['SLACK_BOT_TOKEN']
+const { FileInstallationStore, InstallProvider } = require('@slack/oauth');
+
+const signingSecret = process.env['SLACK_SIGNING_SECRET'];
+const botToken = process.env['SLACK_BOT_TOKEN'];
+const clientId = process.env['SLACK_CLIENT_ID'];
+const clientSecret = process.env['SLACK_CLIENT_SECRET'];
+
 
 const app = new App({
-  signingSecret: signingSecret,
-  token: botToken,
+  signingSecret,
+  clientId,
+  clientSecret,
+  stateSecret: 'my-state-secret',
+  scopes: ['channels:history', 'chat:write', 'commands'],
+  // installationStore: new FileInstallationStore(),
 });
 
+// const app = new App({
+//   signingSecret: signingSecret,
+//   token: botToken,
+// });
+
+// const installer = new InstallProvider({
+//   clientId: process.env.SLACK_CLIENT_ID,
+//   clientSecret: process.env.SLACK_CLIENT_SECRET,
+//   stateSecret: 'my-state-secret'
+// });
 
 
-app.action('button_click', async ({ body, ack, say }) => {
-  await ack();
-  await say(`<@${body.user.id}> clicked the button`);
-});
+
+// app.action('button_click', async ({ body, ack, say }) => {
+//   await ack();
+//   await say(`<@${body.user.id}> clicked the button`);
+// });
 
 app.error(console.error);
 
