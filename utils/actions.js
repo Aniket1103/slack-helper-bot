@@ -21,29 +21,7 @@ const ACTIONS = {
     const joke = resp.data.joke;
     // console.log(resp.data);
     await say(`Here goes your joke <@${message.user}>,\n${joke}`);
-  },
-  "button": async (message, say) => {
-    await say({
-      blocks: [
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": `Hey there <@${message.user}>!\n`
-          },
-          "accessory": {
-            "type": "button",
-            "text": {
-              "type": "plain_text",
-              "text": "Click Me"
-            },
-            "action_id": "button_click"
-          }
-        }
-      ],
-      text: `Hey there <@${message.user}>!\n`
-    });
-  },
+  }
 }
 
 const COMMANDS = Object.keys(ACTIONS);
